@@ -12,7 +12,7 @@ public class DimensionVision : MonoBehaviour
     void Awake()
     {
         screenMeshFilter = screen.GetComponent<MeshFilter>();
-        CreateViewTexture();
+        // CreateViewTexture();
 
         screen.material.SetInt("displayMask", 1);
         screen.material.SetTexture("_MainTex", viewTexture);
