@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemyLR : MonoBehaviour
+public class SimpleEnemyLR : HideEnemy
 {
     public float speed;
     public float rayCastDownlength;
@@ -12,7 +12,11 @@ public class SimpleEnemyLR : MonoBehaviour
     public bool moveR;
 
     bool noFloor;
-    public Transform[] rayEmitter;
+    public Transform[] rays;
+
+    public BoxCollider boxCol;
+    public BoxCollider weapon;
+
     private void Start()
     {
         forward = Camera.main.transform.right;
@@ -20,14 +24,20 @@ public class SimpleEnemyLR : MonoBehaviour
 
     private void Update()
     {
+        DoRayCast();
+        if (isDisabled)
+            return;
+
+        CheckForEdge();
+        CheckForWall();
+
         if (!noFloor)
             Move();
     }
 
     void Move()
     {
-        CheckForEdge();
-        CheckForWall();
+
         if (moveR)
         {
             transform.position += forward * speed * Time.deltaTime;
@@ -43,7 +53,7 @@ public class SimpleEnemyLR : MonoBehaviour
     void CheckForEdge()
     {
         int i = 0;
-        foreach (Transform rayem in rayEmitter)
+        foreach (Transform rayem in rays)
             if (!Physics.Raycast(rayem.position, Vector3.down, rayCastDownlength, floor, QueryTriggerInteraction.Ignore))
             {
                 if (moveR)
@@ -53,14 +63,16 @@ public class SimpleEnemyLR : MonoBehaviour
 
                 i++;
             }
-            
+
         if (i == 2)
             noFloor = true;
+        else
+            noFloor = false;
     }
 
     void CheckForWall()
     {
-        foreach (Transform rayem in rayEmitter)
+        foreach (Transform rayem in rays)
             if (Physics.Raycast(rayem.position, rayem.forward, rayCastForwardlength, floor, QueryTriggerInteraction.Ignore))
             {
                 if (moveR)
@@ -69,6 +81,21 @@ public class SimpleEnemyLR : MonoBehaviour
                     moveR = true;
                 return;
             }
+    }
 
+    public override void Disable()
+    {
+        GetComponent<Rigidbody>().useGravity = false;
+        isDisabled = true;
+        boxCol.enabled = false;
+        weapon.enabled = false;
+    }
+
+    public override void Enable()
+    {
+        isDisabled = false;
+        boxCol.enabled = true;
+        weapon.enabled = true;
+        GetComponent<Rigidbody>().useGravity = true;
     }
 }

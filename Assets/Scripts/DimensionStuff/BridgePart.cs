@@ -5,6 +5,11 @@ using UnityEngine;
 public class BridgePart : Hideable
 {
     public BoxCollider boxCol;
+
+    private void Start()
+    {
+        boxCol = GetComponent<BoxCollider>();
+    }
     public override void Hide()
     {
         boxCol.enabled = false;
@@ -17,15 +22,4 @@ public class BridgePart : Hideable
         isHidden = false;
     }
 
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.GetComponent<DimensionTrigger>())
-    //         Unhide();
-    // }
-
-    // private void OnTriggerExit(Collider other)
-    // {
-    //     if (other.GetComponent<DimensionTrigger>())
-    //         Hide();
-    // }
 }

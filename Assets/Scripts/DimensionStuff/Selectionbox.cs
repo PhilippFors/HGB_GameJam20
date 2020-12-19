@@ -61,6 +61,7 @@ public class Selectionbox : MonoBehaviour
 
         if (Vector3.Distance(squareStartPos, squareEndPos) <= windowSize)
         {
+
             lastPos = (squareEndPos + squareStartPos) / 2f;
 
             z = boxCol.transform.position.z;
@@ -84,7 +85,7 @@ public class Selectionbox : MonoBehaviour
                 verts[1] = new Vector3(squareEndPos.x - selectionBox.transform.position.x, squareStartPos.y - selectionBox.transform.position.y, verts[1].z);
                 verts[2] = new Vector3(squareStartPos.x - selectionBox.transform.position.x, squareStartPos.y - selectionBox.transform.position.y, verts[2].z);
                 boxCol.size = new Vector3(Vector3.Distance(verts[0], verts[3]), Vector3.Distance(verts[0], verts[1]), boxCol.size.z);
-                screenBoxCol.size = new Vector3(Vector3.Distance(verts[0], verts[1]), Vector3.Distance(verts[0], verts[3]), screenBoxCol.size.z);
+                screenBoxCol.size = new Vector3(Vector3.Distance(verts[0], verts[3]), Vector3.Distance(verts[0], verts[1]), screenBoxCol.size.z);
             }
             else if (squareEndPos.x >= squareStartPos.x & squareEndPos.y >= squareStartPos.y)
             {
@@ -93,7 +94,7 @@ public class Selectionbox : MonoBehaviour
                 verts[1] = new Vector3(squareEndPos.x - selectionBox.transform.position.x, squareStartPos.y - selectionBox.transform.position.y, verts[1].z);
                 verts[2] = new Vector3(squareStartPos.x - selectionBox.transform.position.x, squareStartPos.y - selectionBox.transform.position.y, verts[2].z);
                 boxCol.size = new Vector3(Vector3.Distance(verts[0], verts[3]), Vector3.Distance(verts[0], verts[1]), boxCol.size.z);
-                screenBoxCol.size = new Vector3(Vector3.Distance(verts[0], verts[1]), Vector3.Distance(verts[0], verts[3]), screenBoxCol.size.z);
+                screenBoxCol.size = new Vector3(Vector3.Distance(verts[0], verts[3]), Vector3.Distance(verts[0], verts[1]), screenBoxCol.size.z);
             }
             else
             {
@@ -102,7 +103,7 @@ public class Selectionbox : MonoBehaviour
                 verts[1] = new Vector3(squareEndPos.x - selectionBox.transform.position.x, squareStartPos.y - selectionBox.transform.position.y, verts[1].z);
                 verts[0] = new Vector3(squareStartPos.x - selectionBox.transform.position.x, squareStartPos.y - selectionBox.transform.position.y, verts[0].z);
                 boxCol.size = new Vector3(Vector3.Distance(verts[2], verts[3]), Vector3.Distance(verts[2], verts[1]), boxCol.size.z);
-                screenBoxCol.size = new Vector3(Vector3.Distance(verts[0], verts[3]), Vector3.Distance(verts[0], verts[1]), screenBoxCol.size.z);
+                screenBoxCol.size = new Vector3(Vector3.Distance(verts[0], verts[1]), Vector3.Distance(verts[0], verts[3]), screenBoxCol.size.z);
             }
             f.mesh.vertices = verts;
         }
@@ -111,7 +112,7 @@ public class Selectionbox : MonoBehaviour
         boxCol.transform.position = lastPos;
 
         boxCol.transform.position = new Vector3(boxCol.transform.position.x, boxCol.transform.position.y, z);
-        
+
         z = screenBoxCol.transform.position.z;
 
         screenBoxCol.transform.position = lastPos;
@@ -126,6 +127,7 @@ public class Selectionbox : MonoBehaviour
 
     void ButtonStart()
     {
+        selecting = true;
         selectionBox.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist);
         zeplane = new Plane(Vector3.forward, new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist));
         Ray cameraRay = Camera.main.ScreenPointToRay(inputManager.mousePos);
@@ -140,7 +142,16 @@ public class Selectionbox : MonoBehaviour
     void ButtonStop()
     {
         Debug.Log("Stop");
-        collection.Release();
+
+        if (squareEndPos.x >= squareStartPos.x)
+        {
+            collection.ReleaserToLeft();
+        }
+        else if (squareEndPos.x <= squareStartPos.x)
+        {
+            collection.ReleaseToRight();
+        }
+        // collection.Release();
         collection.QueueWorker();
         selecting = false;
     }

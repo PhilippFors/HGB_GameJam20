@@ -8,24 +8,50 @@ public class Bullet : Collectable
     public float damage;
     public Rigidbody rb => GetComponent<Rigidbody>();
     public Vector3 forward;
+    public Coroutine coroutine;
     private void Start()
     {
         forward = Camera.main.transform.right;
-        InitBullet(forward, 2, 0);
+        // InitBullet(forward, 2, 0);
     }
     public void InitBullet(Vector3 dir, float force, float dmg)
     {
         damage = dmg;
+        speed = force;
         rb.AddForce(dir * force, ForceMode.Impulse);
+        // coroutine = StartCoroutine(Wait());
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerController p = other.GetComponent<PlayerController>();
+        PlayerHealth p = other.GetComponent<PlayerHealth>();
         if (p != null)
         {
-            Debug.Log("Damage");
-            Destroy(this.gameObject);
+            p.Damage();
+            Destroy(gameObject);
         }
+        
+        HideEnemy e = other.GetComponent<HideEnemy>();
+        if (e != null)
+        {
+            Destroy(gameObject);
+            e.Damage();
+        }
+
+        if (other.gameObject.tag.Equals("Walls"))
+            Destroy(gameObject);
+    }
+
+    public void StopWait()
+    {
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+
+    }
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(10f);
+        if (!releasable || released)
+            Destroy(gameObject);
     }
 }

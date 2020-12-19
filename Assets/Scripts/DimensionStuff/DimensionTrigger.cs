@@ -28,8 +28,8 @@ public class DimensionTrigger : MonoBehaviour
             Bullet bullet = h.gameObject.GetComponent<Bullet>();
             if (bullet != null)
             {
-                bullet.rb.velocity = Vector3.zero;
-                bullet.rb.angularVelocity = Vector3.zero;
+                bullet.GetComponent<SphereCollider>().enabled = false;
+                bullet.StopWait();
             }
 
             if (selectionBox.selecting)
@@ -46,7 +46,13 @@ public class DimensionTrigger : MonoBehaviour
         }
     }
 
-    public void Release()
+    // IEnumerator Wait(Collider other)
+    // {
+
+
+    // }
+
+    public void ReleaseToRight()
     {
         if (collectables.Count == 0)
             return;
@@ -55,27 +61,51 @@ public class DimensionTrigger : MonoBehaviour
             if (coll.releasable)
             {
                 coll.released = true;
-
+                coll.transform.position = transform.position;
                 Bullet bullet = coll.gameObject.GetComponent<Bullet>();
                 if (bullet != null)
                 {
+                    bullet.GetComponent<SphereCollider>().enabled = true;
+                    bullet.rb.velocity = Vector3.zero;
+
                     bullet.gameObject.SetActive(true);
-                    if (coll.fromLeft)
-                    {
-                        coll.transform.position = transform.position - new Vector3(col.size.x / 2, 0, 0);
-                        bullet.InitBullet(-bullet.forward, 2, 0);
-                    }
-                    if (coll.fromRight)
-                    {
-                        coll.transform.position = transform.position + new Vector3(col.size.x / 2, 0, 0);
-                        bullet.InitBullet(bullet.forward, 2, 0);
-                    }
+
+                    coll.transform.rotation = Quaternion.LookRotation(-bullet.forward);
+                    bullet.InitBullet(-bullet.forward, bullet.speed, 0);
                 }
 
                 collectables.Remove(coll);
                 return;
             }
     }
+
+    public void ReleaserToLeft()
+    {
+        if (collectables.Count == 0)
+            return;
+
+        foreach (Collectable coll in collectables)
+            if (coll.releasable)
+            {
+                coll.released = true;
+                coll.transform.position = transform.position;
+                Bullet bullet = coll.gameObject.GetComponent<Bullet>();
+                if (bullet != null)
+                {
+                    bullet.GetComponent<SphereCollider>().enabled = true;
+                    bullet.rb.velocity = Vector3.zero;
+
+                    bullet.gameObject.SetActive(true);
+
+                    coll.transform.rotation = Quaternion.LookRotation(bullet.forward);
+                    bullet.InitBullet(bullet.forward, bullet.speed, 0);
+                }
+
+                collectables.Remove(coll);
+                return;
+            }
+    }
+
 
     public void QueueWorker()
     {
