@@ -11,8 +11,8 @@ public class Turret : MonoBehaviour
 
     public Transform barrels;
     public Animator anim;
-    bool faceRight;
-    bool canShoot = true;
+    public bool faceLeft;
+    bool canShoot = false;
     private void Start()
     {
 
@@ -26,19 +26,19 @@ public class Turret : MonoBehaviour
 
     public void Shoot()
     {
-        if (time <= fireRate)
+        if (time >= fireRate)
         {
-            time += Time.deltaTime;
             canShoot = true;
         }
-
-        if (canShoot)
-        {
-            time -= fireRate;
-            //anime.Play("Shoot")
-            //Shoot particle
-            canShoot = false;
-        }
+        time += Time.deltaTime;
+        if (IsPlayerInFront())
+            if (canShoot)
+            {
+                time -= fireRate;
+                anim.Play("Turret_Shoot");
+                //Shoot particle
+                canShoot = false;
+            }
     }
     public void LookAtPlayer()
     {
@@ -50,7 +50,7 @@ public class Turret : MonoBehaviour
 
     public bool IsPlayerInFront()
     {
-        if (faceRight)
+        if (faceLeft)
         {
             return transform.position.x + 1f > player.position.x;
         }

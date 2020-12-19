@@ -9,8 +9,8 @@ public class SimpleEnemyLR : MonoBehaviour
     public float rayCastForwardlength;
     Vector3 forward;
     public LayerMask floor;
-    bool moveR;
-    bool moveL;
+    public bool moveR;
+
 
     public Transform[] rayEmitter;
     private void Start()
