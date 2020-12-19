@@ -28,13 +28,12 @@ public class Grapple : MonoBehaviour
                 p.SetActive();
             }
             canGrapple = Vector3.Distance(transform.position, target.position) <= grappleDist;
-
         }
         else
         {
             if (target != null)
                 target.GetComponent<GrapplePoint>().SetInactive();
-                
+
             target = null;
         }
         // else

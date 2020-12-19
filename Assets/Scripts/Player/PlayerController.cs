@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public bool alive;
     public float speed;
     public float gravity;
 
@@ -14,7 +15,6 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded;
 
     [Header("Dash Settings")]
-    public AnimationCurve dashCurve;
     public float dashDistance;
     public float drag;
     public float dashTime;
@@ -38,11 +38,17 @@ public class PlayerController : MonoBehaviour
     {
         forward = Camera.main.transform.right;
         inputManager.inputControls.Gameplay.Grapple.performed += ctx => GrappleTo();
+        inputManager.inputControls.Gameplay.Dash.performed += ctx => Dash();
+        inputManager.inputControls.Gameplay.Jump.performed += ctx => Jump();
     }
 
     private void Update()
     {
+        if (!alive)
+            return;
+
         Gravity();
+
         if (!isDashing)
         {
             currentMoveDirection = forward * inputManager.move;
@@ -55,9 +61,6 @@ public class PlayerController : MonoBehaviour
         if (inputManager.move != 0)
             transform.rotation = Quaternion.LookRotation(currentMoveDirection, Vector3.up);
 
-        Dash();
-        Jump();
-
         if (!isGrappling && !isDashing)
         {
             if (vel.y < 0)
@@ -66,6 +69,7 @@ public class PlayerController : MonoBehaviour
                 vel += Vector3.up * gravity * (lowJump - 1) * Time.deltaTime;
         }
         // character.Move(vel * Time.deltaTime);
+        vel.x /= 1 + drag * Time.deltaTime;
         transform.position += vel * Time.deltaTime;
     }
 
@@ -81,10 +85,7 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (inputManager.inputControls.Gameplay.Jump.triggered && isGrounded)
-        {
-            vel += Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
+        vel += Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
 
     void Dash()
@@ -98,7 +99,7 @@ public class PlayerController : MonoBehaviour
                                                                   0,
                                                                   (Mathf.Log(1f / (Time.deltaTime * drag + 1)) / -Time.deltaTime)));
         }
-        vel.x /= 1 + drag * Time.deltaTime;
+
         // vel.y /= 1 + drag * Time.deltaTime;
         // vel.z /= 1 + drag * Time.deltaTime;
     }

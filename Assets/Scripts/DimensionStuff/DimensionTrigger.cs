@@ -15,16 +15,7 @@ public class DimensionTrigger : MonoBehaviour
         if (h != null && !h.released)
         {
             h.releasable = false;
-            if (h.transform.position.x >= transform.position.x)
-            {
-                h.fromRight = true;
-                h.fromLeft = false;
-            }
-            else
-            {
-                h.fromRight = false;
-                h.fromLeft = true;
-            }
+        
             Bullet bullet = h.gameObject.GetComponent<Bullet>();
             if (bullet != null)
             {

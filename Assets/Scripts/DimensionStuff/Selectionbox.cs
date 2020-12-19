@@ -18,6 +18,8 @@ public class Selectionbox : MonoBehaviour
     [SerializeField] float planeDist;
     public DimensionTrigger collection;
 
+    public float openTime;
+    public bool timer;
     public bool selecting;
 
     public float windowSize;
@@ -28,25 +30,38 @@ public class Selectionbox : MonoBehaviour
 
         inputManager.inputControls.Gameplay.LeftButtonPress.canceled += ctx => ButtonStop();
 
-        inputManager.inputControls.Gameplay.RightButton.performed += ctx => CloseBox();
+        inputManager.inputControls.Gameplay.RightButton.canceled += ctx => Release();
+        inputManager.inputControls.Gameplay.RightButton.started += ctx => ButtonStart();
         selectionBox.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist);
         selectionBox.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        if (UnityEngine.Input.GetMouseButton(0))
+        if (inputManager.isMoving & !timer)
+            coroutine = StartCoroutine(OpenTime());
+
+        if (UnityEngine.Input.GetMouseButton(0) && selecting)
+        {
+            windowSize = 18;
             PullPlane();
+        }
+        else if (UnityEngine.Input.GetMouseButton(1))
+        {
+            windowSize = 5;
+            PullPlane();
+        }
     }
 
     void PullPlane()
     {
-        if (!selectionBox.gameObject.activeInHierarchy)
+        if (!selectionBox.gameObject.activeSelf)
         {
             boxCol.gameObject.SetActive(true);
             selectionBox.gameObject.SetActive(true);
         }
 
+        screenBoxCol.enabled = true;
         selectionBox.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist);
         zeplane = new Plane(Vector3.forward, new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist));
         Ray cameraRay = Camera.main.ScreenPointToRay(inputManager.mousePos);
@@ -136,13 +151,25 @@ public class Selectionbox : MonoBehaviour
         {
             squareStartPos = cameraRay.GetPoint(rayLength);
         }
-        selecting = true;
     }
 
+    Coroutine coroutine;
     void ButtonStop()
     {
         Debug.Log("Stop");
 
+        collection.QueueWorker();
+        selecting = false;
+
+        if (!timer && coroutine != null)
+            StopCoroutine(coroutine);
+
+        if (!timer)
+            coroutine = StartCoroutine(OpenTime());
+    }
+
+    public void Release()
+    {
         if (squareEndPos.x >= squareStartPos.x)
         {
             collection.ReleaserToLeft();
@@ -151,15 +178,28 @@ public class Selectionbox : MonoBehaviour
         {
             collection.ReleaseToRight();
         }
-        // collection.Release();
-        collection.QueueWorker();
-        selecting = false;
+        CloseBox();
     }
 
     void CloseBox()
     {
-        selectionBox.gameObject.SetActive(false);
+        selecting = false;
+        screenBoxCol.enabled = false;
         boxCol.gameObject.SetActive(false);
+    }
+
+    IEnumerator OneFrame()
+    {
+        yield return new WaitForSeconds(0.2f);
+        selectionBox.gameObject.SetActive(false);
+    }
+
+    IEnumerator OpenTime()
+    {
+        timer = true;
+        yield return new WaitForSeconds(openTime);
+        CloseBox();
+        timer = false;
     }
 
 }

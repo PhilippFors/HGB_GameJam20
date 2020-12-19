@@ -7,14 +7,15 @@ public class InputManager : MonoBehaviour
     public Input inputControls;
     public Vector2 mousePos;
     public float move;
+    public bool isMoving = false;
     private void Awake()
     {
         inputControls = new Input();
     }
     private void Start()
     {
-        inputControls.Gameplay.Move.performed += ctx => move = ctx.ReadValue<float>();
-        inputControls.Gameplay.Move.canceled += ctx => move = 0;
+        inputControls.Gameplay.Move.performed += ctx => Move(ctx.ReadValue<float>());
+        inputControls.Gameplay.Move.canceled += ctx => NoMove();
     }
     private void OnEnable()
     {
@@ -25,6 +26,16 @@ public class InputManager : MonoBehaviour
         inputControls.Gameplay.Disable();
     }
 
+    void Move(float m)
+    {
+        move = m;
+        isMoving = true;
+    }
+    void NoMove()
+    {
+        move = 0;
+        isMoving = false;
+    }
     // Update is called once per frame
     void Update()
     {
