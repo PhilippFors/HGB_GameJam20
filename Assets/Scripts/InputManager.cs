@@ -6,9 +6,14 @@ public class InputManager : MonoBehaviour
 {
     public Input inputControls;
     public Vector2 mousePos;
+    public float move;
     private void Awake()
     {
         inputControls = new Input();
+    }
+    private void Start()
+    {
+        inputControls.Gameplay.Move.performed += ctx => move = ctx.ReadValue<float>();
     }
     private void OnEnable()
     {
