@@ -23283,10 +23283,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ThomasWork
       objectReference: {fileID: 0}
-    - target: {fileID: 3182902222508834807, guid: bb714df753a97464795b584266ae01a4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7448105475453237490, guid: bb714df753a97464795b584266ae01a4, type: 3}
       propertyPath: m_RootOrder
       value: 4
