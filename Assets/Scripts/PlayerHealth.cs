@@ -8,6 +8,9 @@ public class PlayerHealth : MonoBehaviour
 
     public float currentHealth;
 
+    public bool invulnverable = false;
+
+    public float Iframes;
     private void Start()
     {
         currentHealth = maximumHealth;
@@ -15,6 +18,9 @@ public class PlayerHealth : MonoBehaviour
 
     public void Damage()
     {
+        if (invulnverable)
+            return;
+            
         if (currentHealth > 0)
             currentHealth--;
 
@@ -22,5 +28,12 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.Log("You are dead");
         }
+    }
+
+    IEnumerator Wait()
+    {
+        invulnverable = true;
+        yield return new WaitForSeconds(Iframes);
+        invulnverable = false;
     }
 }

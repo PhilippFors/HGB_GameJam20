@@ -23,9 +23,19 @@ public class Grapple : MonoBehaviour
             // squareStartPos = cameraRay.GetPoint(rayLength);
             GrapplePoint p = hit.transform.GetComponent<GrapplePoint>();
             if (p != null)
+            {
                 target = p.transform;
-
+                p.SetActive();
+            }
             canGrapple = Vector3.Distance(transform.position, target.position) <= grappleDist;
+
+        }
+        else
+        {
+            if (target != null)
+                target.GetComponent<GrapplePoint>().SetInactive();
+                
+            target = null;
         }
         // else
         // {

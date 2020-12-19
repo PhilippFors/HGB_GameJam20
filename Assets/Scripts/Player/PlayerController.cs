@@ -57,11 +57,12 @@ public class PlayerController : MonoBehaviour
 
         Dash();
         Jump();
-        if (!isGrappling)
+
+        if (!isGrappling && !isDashing)
         {
             if (vel.y < 0)
                 vel += Vector3.up * gravity * (fallmult - 1) * Time.deltaTime;
-            else if (vel.y > 0 && !inputManager.inputControls.Gameplay.Jump.triggered)
+            else if (vel.y > 0 && !UnityEngine.Input.GetKey(KeyCode.Space))
                 vel += Vector3.up * gravity * (lowJump - 1) * Time.deltaTime;
         }
         // character.Move(vel * Time.deltaTime);
@@ -70,19 +71,19 @@ public class PlayerController : MonoBehaviour
 
     void Gravity()
     {
-        if (!isDashing)
+        if (!isDashing && !isGrappling)
             vel.y += gravity * Time.deltaTime;
 
-        isGrounded = Physics.CheckSphere(groundchecker.position, 0.5f, defaultMask, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckSphere(groundchecker.position, 0.2f, defaultMask, QueryTriggerInteraction.Ignore);
         if (isGrounded && vel.y < 0)
             vel.y = 0;
     }
 
     void Jump()
     {
-        if (isGrounded && inputManager.inputControls.Gameplay.Jump.triggered)
+        if (inputManager.inputControls.Gameplay.Jump.triggered && isGrounded)
         {
-            vel += Vector3.up * Mathf.Sqrt(jumpHeight * -2 * gravity);
+            vel += Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
 
@@ -121,22 +122,23 @@ public class PlayerController : MonoBehaviour
     void GrappleTo()
     {
         Debug.Log("grapple");
-        if (grapple.target != null && grapple.canGrapple)
+        if (grapple.target != null & grapple.canGrapple)
         {
-            StartCoroutine(GrappleTime());
+            StartCoroutine(GrappleTime(grapple.target));
             // GetComponent<Rigidbody>().AddForce((grapple.target.position - transform.position) * grappleDistance, ForceMode.Impulse);
         }
     }
 
-    IEnumerator GrappleTime()
+    IEnumerator GrappleTime(Transform t)
     {
+        Transform target = t;
         float currentTime = 0;
         isGrappling = true;
         while (currentTime <= grappleTime)
         {
             float sp = grapplespeed.Evaluate(currentTime);
             currentTime += Time.deltaTime;
-            rb.velocity = (grapple.target.position - transform.position) * sp;
+            rb.velocity = (target.position - transform.position) * sp;
             yield return null;
         }
         isGrappling = false;

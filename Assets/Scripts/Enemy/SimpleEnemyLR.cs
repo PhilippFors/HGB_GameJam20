@@ -33,6 +33,8 @@ public class SimpleEnemyLR : HideEnemy
 
         if (!noFloor)
             Move();
+        else
+            GetComponent<Rigidbody>().useGravity = true;
     }
 
     void Move()
@@ -85,17 +87,17 @@ public class SimpleEnemyLR : HideEnemy
 
     public override void Disable()
     {
-        GetComponent<Rigidbody>().useGravity = false;
+        // GetComponent<Rigidbody>().useGravity = false;
         isDisabled = true;
-        boxCol.enabled = false;
+        // boxCol.enabled = false;
         weapon.enabled = false;
     }
 
     public override void Enable()
     {
         isDisabled = false;
-        boxCol.enabled = true;
+        // boxCol.enabled = true;
         weapon.enabled = true;
-        GetComponent<Rigidbody>().useGravity = true;
+        // GetComponent<Rigidbody>().useGravity = true;
     }
 }
