@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 1aa6147b1ee7c3349a253d5d1c99fe83
+guid: a5c7d4a4ccd82ee4daf67dd680d5ddb8
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
-    second: Take 001
+    second: Turret_Shoot
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Take 001
+      name: Turret_Shoot
       takeName: Take 001
       internalID: 0
       firstFrame: 1
