@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class CharacterClone : MonoBehaviour
 {
-    public PlayerController controller;
+    public PlayerController original;
     public float xOffset;
     // Update is called once per frame
     private void Start()
     {
-        xOffset = Vector3.Distance(transform.position, controller.transform.position);
+        xOffset = Vector3.Distance(transform.position, original.transform.position);
     }
     void LateUpdate()
     {
-        transform.position = controller.transform.position + new Vector3(xOffset, 0, 0);
-        transform.rotation = controller.transform.rotation;
+        transform.position = original.transform.position + new Vector3(xOffset, 0, 0);
+        transform.rotation = original.transform.rotation;
     }
 }
