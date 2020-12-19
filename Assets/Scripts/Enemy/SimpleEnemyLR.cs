@@ -11,7 +11,7 @@ public class SimpleEnemyLR : MonoBehaviour
     public LayerMask floor;
     public bool moveR;
 
-
+    bool noFloor;
     public Transform[] rayEmitter;
     private void Start()
     {
@@ -20,7 +20,8 @@ public class SimpleEnemyLR : MonoBehaviour
 
     private void Update()
     {
-        Move();
+        if (!noFloor)
+            Move();
     }
 
     void Move()
@@ -41,6 +42,7 @@ public class SimpleEnemyLR : MonoBehaviour
 
     void CheckForEdge()
     {
+        int i = 0;
         foreach (Transform rayem in rayEmitter)
             if (!Physics.Raycast(rayem.position, Vector3.down, rayCastDownlength, floor, QueryTriggerInteraction.Ignore))
             {
@@ -48,8 +50,12 @@ public class SimpleEnemyLR : MonoBehaviour
                     moveR = false;
                 else
                     moveR = true;
-                return;
+
+                i++;
             }
+            
+        if (i == 2)
+            noFloor = true;
     }
 
     void CheckForWall()
@@ -63,5 +69,6 @@ public class SimpleEnemyLR : MonoBehaviour
                     moveR = true;
                 return;
             }
+
     }
 }

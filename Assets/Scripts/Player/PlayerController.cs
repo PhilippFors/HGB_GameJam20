@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public float dashDistance;
     public float drag;
     public float dashTime;
-    bool isDashing;
+    bool isDashing = false;
     [SerializeField] InputManager inputManager;
     public CharacterController character;
 
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask defaultMask;
     public Transform groundchecker;
     Vector3 currentMoveDirection;
-    Rigidbody rb => GetComponent<Rigidbody>();
+    // Rigidbody rb => GetComponent<Rigidbody>();
 
     Vector3 forward;
     private void Start()
@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
         Gravity();
         currentMoveDirection = forward * inputManager.move;
         Vector3 move = currentMoveDirection * speed;
+
         character.Move(move * Time.deltaTime);
 
         if (inputManager.move != 0)
@@ -48,9 +49,9 @@ public class PlayerController : MonoBehaviour
         Jump();
 
         if (vel.y < 0)
-            vel += Vector3.up * gravity * (fallmult) * Time.deltaTime;
+            vel += Vector3.up * gravity * (fallmult - 1) * Time.deltaTime;
         else if (vel.y > 0 && !inputManager.inputControls.Gameplay.Jump.triggered)
-            vel += Vector3.up * gravity * (lowJump) * Time.deltaTime;
+            vel += Vector3.up * gravity * (lowJump - 1) * Time.deltaTime;
 
         character.Move(vel * Time.deltaTime);
     }

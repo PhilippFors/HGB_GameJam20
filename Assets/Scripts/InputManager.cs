@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         inputControls.Gameplay.Move.performed += ctx => move = ctx.ReadValue<float>();
+        inputControls.Gameplay.Move.canceled += ctx => move = 0;
     }
     private void OnEnable()
     {
