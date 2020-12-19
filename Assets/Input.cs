@@ -35,9 +35,25 @@ public class @Input : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)""
                 },
                 {
-                    ""name"": ""LeftButtonHold"",
+                    ""name"": ""RightButton"",
                     ""type"": ""Button"",
                     ""id"": ""c01c9b0a-1564-4874-8a17-c225cbbc6b6d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""95fbb3ca-efb7-485d-88fb-223cba575ce0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""6bc65cb7-0396-43c0-81c2-f784202bf098"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -69,11 +85,55 @@ public class @Input : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""3374a618-b942-4927-bc44-432b9ab6ee3c"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press(behavior=2)"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LeftButtonHold"",
+                    ""action"": ""RightButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""b7fe5bae-9252-4f24-9122-469c60b5d1c9"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""48a2f6aa-2a52-4601-83c7-7297b214e5a9"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3b35f357-660c-4b15-a2ba-3b5d77c9f5e6"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08211443-258c-4a55-83ee-fa05f7898ce8"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -86,7 +146,9 @@ public class @Input : IInputActionCollection, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Mouse = m_Gameplay.FindAction("Mouse", throwIfNotFound: true);
         m_Gameplay_LeftButtonPress = m_Gameplay.FindAction("LeftButtonPress", throwIfNotFound: true);
-        m_Gameplay_LeftButtonHold = m_Gameplay.FindAction("LeftButtonHold", throwIfNotFound: true);
+        m_Gameplay_RightButton = m_Gameplay.FindAction("RightButton", throwIfNotFound: true);
+        m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
+        m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -138,14 +200,18 @@ public class @Input : IInputActionCollection, IDisposable
     private IGameplayActions m_GameplayActionsCallbackInterface;
     private readonly InputAction m_Gameplay_Mouse;
     private readonly InputAction m_Gameplay_LeftButtonPress;
-    private readonly InputAction m_Gameplay_LeftButtonHold;
+    private readonly InputAction m_Gameplay_RightButton;
+    private readonly InputAction m_Gameplay_Move;
+    private readonly InputAction m_Gameplay_Jump;
     public struct GameplayActions
     {
         private @Input m_Wrapper;
         public GameplayActions(@Input wrapper) { m_Wrapper = wrapper; }
         public InputAction @Mouse => m_Wrapper.m_Gameplay_Mouse;
         public InputAction @LeftButtonPress => m_Wrapper.m_Gameplay_LeftButtonPress;
-        public InputAction @LeftButtonHold => m_Wrapper.m_Gameplay_LeftButtonHold;
+        public InputAction @RightButton => m_Wrapper.m_Gameplay_RightButton;
+        public InputAction @Move => m_Wrapper.m_Gameplay_Move;
+        public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -161,9 +227,15 @@ public class @Input : IInputActionCollection, IDisposable
                 @LeftButtonPress.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftButtonPress;
                 @LeftButtonPress.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftButtonPress;
                 @LeftButtonPress.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftButtonPress;
-                @LeftButtonHold.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftButtonHold;
-                @LeftButtonHold.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftButtonHold;
-                @LeftButtonHold.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftButtonHold;
+                @RightButton.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightButton;
+                @RightButton.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightButton;
+                @RightButton.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightButton;
+                @Move.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
+                @Move.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
+                @Move.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMove;
+                @Jump.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -174,9 +246,15 @@ public class @Input : IInputActionCollection, IDisposable
                 @LeftButtonPress.started += instance.OnLeftButtonPress;
                 @LeftButtonPress.performed += instance.OnLeftButtonPress;
                 @LeftButtonPress.canceled += instance.OnLeftButtonPress;
-                @LeftButtonHold.started += instance.OnLeftButtonHold;
-                @LeftButtonHold.performed += instance.OnLeftButtonHold;
-                @LeftButtonHold.canceled += instance.OnLeftButtonHold;
+                @RightButton.started += instance.OnRightButton;
+                @RightButton.performed += instance.OnRightButton;
+                @RightButton.canceled += instance.OnRightButton;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -185,6 +263,8 @@ public class @Input : IInputActionCollection, IDisposable
     {
         void OnMouse(InputAction.CallbackContext context);
         void OnLeftButtonPress(InputAction.CallbackContext context);
-        void OnLeftButtonHold(InputAction.CallbackContext context);
+        void OnRightButton(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }

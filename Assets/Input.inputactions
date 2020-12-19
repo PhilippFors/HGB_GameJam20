@@ -22,9 +22,25 @@
                     "interactions": "Press(behavior=2)"
                 },
                 {
-                    "name": "LeftButtonHold",
+                    "name": "RightButton",
                     "type": "Button",
                     "id": "c01c9b0a-1564-4874-8a17-c225cbbc6b6d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Move",
+                    "type": "PassThrough",
+                    "id": "95fbb3ca-efb7-485d-88fb-223cba575ce0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "6bc65cb7-0396-43c0-81c2-f784202bf098",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -56,11 +72,55 @@
                 {
                     "name": "",
                     "id": "3374a618-b942-4927-bc44-432b9ab6ee3c",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "Press(behavior=2)",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LeftButtonHold",
+                    "action": "RightButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "b7fe5bae-9252-4f24-9122-469c60b5d1c9",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "48a2f6aa-2a52-4601-83c7-7297b214e5a9",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "3b35f357-660c-4b15-a2ba-3b5d77c9f5e6",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "08211443-258c-4a55-83ee-fa05f7898ce8",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
