@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("grapple");
         if (grapple.target != null & grapple.canGrapple)
         {
-            StartCoroutine(GrappleTime(grapple.target));
+            StartCoroutine(GrappleTime(grapple.target.transform));
         }
     }
 

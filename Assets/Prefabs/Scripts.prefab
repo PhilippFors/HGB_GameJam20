@@ -328,6 +328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transtionImage: {fileID: 0}
+  pauseMenu: {fileID: 0}
 --- !u!1 &8295696443659363161
 GameObject:
   m_ObjectHideFlags: 0

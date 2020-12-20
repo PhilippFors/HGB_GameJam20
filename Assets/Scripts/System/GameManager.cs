@@ -5,8 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] SceneLoadManager sceneLoad;
+    [SerializeField] PlayerController player;
     [SerializeField] UIManager uiManager;
-    [SerializeField] PlayerController playerController;
     public static GameManager instance;
     private void Awake()
     {
@@ -14,28 +14,44 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        StartCoroutine(StartLevel());
+        if (sceneLoad.GetScene().Equals("StartMenu"))
+            StartCoroutine(StartLevel(true));
+        else
+            StartCoroutine(StartLevel(false));
     }
 
-    IEnumerator StartLevel()
+    IEnumerator StartLevel(bool isStartMenu)
     {
         uiManager.FadeToTransparent();
         yield return new WaitForSeconds(1f);
-        playerController.alive = true;
+        if (!isStartMenu)
+            player.alive = true;
     }
 
     public void ReturnToStartMenu()
     {
+        if (player != null)
+            player.alive = false;
         sceneLoad.ReturnToStartMenu();
     }
 
+
     public void NextLevel()
     {
+        if (player != null)
+            player.alive = false;
         sceneLoad.LoadNextLevel();
     }
 
     public void Restart()
     {
+        if (player != null)
+            player.alive = false;
         sceneLoad.RestartLevel();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

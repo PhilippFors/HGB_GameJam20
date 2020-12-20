@@ -4,42 +4,53 @@ using UnityEngine;
 
 public class Grapple : MonoBehaviour
 {
-    public Transform target;
+    public GrapplePoint target;
     public LayerMask grappleMask;
     public InputManager input;
     public float grappleDist;
     RaycastHit hit;
     public bool canGrapple;
-
+    Ray cameraRay;
     private void Update()
     {
         FindGrapplePoint();
     }
     void FindGrapplePoint()
     {
-        Ray cameraRay = Camera.main.ScreenPointToRay(input.mousePos);
-        if (Physics.Raycast(cameraRay, out hit, 20f, grappleMask))
+        cameraRay = Camera.main.ScreenPointToRay(input.mousePos);
+
+        if (Physics.Raycast(cameraRay, out hit, 30f, grappleMask))
         {
             GrapplePoint p = hit.transform.GetComponent<GrapplePoint>();
             if (p != null)
             {
-                if (!Physics.Raycast(transform.position, p.transform.position - transform.position, 30f, LayerMask.GetMask("Walls")))
+                target = p;
+                if (!Physics.Raycast(transform.position, target.transform.position - transform.position, grappleDist + 1f, LayerMask.GetMask("Walls")))
                 {
-                    canGrapple = Vector3.Distance(transform.position, p.transform.position) <= grappleDist;
-                    if (canGrapple)
-                    {
-                        target = p.transform;
-                        p.SetActive();
-                    }
+                    canGrapple = Vector3.Distance(transform.position, target.transform.position) <= grappleDist;
+                    target.SetActive();
+                }
+                else
+                {
+                    target.SetInactive();
+
+                    target = null;
                 }
             }
         }
         else
         {
             if (target != null)
-                target.GetComponent<GrapplePoint>().SetInactive();
+                target.SetInactive();
 
             target = null;
         }
+        // if (target != null)
+        //     target.GetComponent<GrapplePoint>().SetActive();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(cameraRay);
     }
 }

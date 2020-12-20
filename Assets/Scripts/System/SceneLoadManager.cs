@@ -13,7 +13,7 @@ public class SceneLoadManager : MonoBehaviour
     {
         currentLevel++;
         if (currentLevel < levelBuildindex.Length)
-            StartCoroutine(LoadLevel(currentLevel));
+            StartCoroutine(LoadScene(currentLevel));
         else
             ReturnToStartMenu();
     }
@@ -25,14 +25,20 @@ public class SceneLoadManager : MonoBehaviour
 
     public void ReturnToStartMenu()
     {
-        StartCoroutine(LoadLevel(startMenu));
+        StartCoroutine(LoadScene(startMenu));
     }
-
-    IEnumerator LoadLevel(int newLevel)
+    public void LoadSpecificScene(int i)
+    {
+        StartCoroutine(LoadScene(i));
+    }
+    public string GetScene()
+    {
+        return SceneManager.GetActiveScene().name;
+    }
+    IEnumerator LoadScene(int newScene)
     {
         uiManager.FadeToBlack();
-        player.alive = false;
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadSceneAsync(newLevel, LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Single);
     }
 }

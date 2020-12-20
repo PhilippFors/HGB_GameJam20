@@ -27,6 +27,7 @@ public class GrapplePoint : Hideable
     {
         active = true;
         mat.DOFloat(0.95f, "_EmissiveExposureWeight", 0.3f);
+        // mat.DOFloat(1f, "_EmissiveExposureWeight", 0.3f);
         if (copy != null)
             copy.GetComponent<MeshRenderer>().material.DOFloat(0.95f, "_EmissiveExposureWeight", 0.3f);
     }
