@@ -6,7 +6,7 @@ public class Selectionbox : MonoBehaviour
 {
     [SerializeField] InputManager inputManager;
     [SerializeField] Transform selectionBox;
-    // public 
+  
     Vector3 squareStartPos;
     Vector3 squareEndPos;
     Vector3 lastPos;
@@ -41,7 +41,7 @@ public class Selectionbox : MonoBehaviour
         if (inputManager.isMoving & !timer)
             coroutine = StartCoroutine(OpenTime());
 
-        if (UnityEngine.Input.GetMouseButton(0) && selecting)
+        if (UnityEngine.Input.GetMouseButton(0) & selecting)
         {
             windowSize = 18;
             PullPlane();
@@ -85,8 +85,6 @@ public class Selectionbox : MonoBehaviour
 
             boxCol.transform.position = new Vector3(boxCol.transform.position.x, boxCol.transform.position.y, z);
 
-            z = screenBoxCol.transform.position.z;
-
             screenBoxCol.transform.position = lastPos;
 
             screenBoxCol.transform.position = new Vector3(screenBoxCol.transform.position.x, screenBoxCol.transform.position.y, selectionBox.transform.position.z);
@@ -128,17 +126,15 @@ public class Selectionbox : MonoBehaviour
 
         boxCol.transform.position = new Vector3(boxCol.transform.position.x, boxCol.transform.position.y, z);
 
-        z = screenBoxCol.transform.position.z;
-
         screenBoxCol.transform.position = lastPos;
 
         screenBoxCol.transform.position = new Vector3(screenBoxCol.transform.position.x, screenBoxCol.transform.position.y, selectionBox.transform.position.z);
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist), 0.5f);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.DrawCube(new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist), new Vector3(1, 1, 0.3f));
+    // }
 
     void ButtonStart()
     {
@@ -186,6 +182,7 @@ public class Selectionbox : MonoBehaviour
         selecting = false;
         screenBoxCol.enabled = false;
         boxCol.gameObject.SetActive(false);
+        StartCoroutine(OneFrame());
     }
 
     IEnumerator OneFrame()
@@ -201,5 +198,4 @@ public class Selectionbox : MonoBehaviour
         CloseBox();
         timer = false;
     }
-
 }

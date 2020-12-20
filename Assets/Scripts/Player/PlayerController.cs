@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public float dashDistance;
     public float drag;
     public float dashTime;
+    public float dashCooldown;
     bool isDashing = false;
 
     [Header("Grapple settings")]
@@ -30,12 +31,14 @@ public class PlayerController : MonoBehaviour
     public LayerMask defaultMask;
     public Transform groundchecker;
     Vector3 currentMoveDirection;
-    Rigidbody rb => GetComponent<Rigidbody>();
+    Rigidbody rb;
     Vector3 move;
     Vector3 forward;
     bool isGrappling;
+
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         forward = Camera.main.transform.right;
         inputManager.inputControls.Gameplay.Grapple.performed += ctx => GrappleTo();
         inputManager.inputControls.Gameplay.Dash.performed += ctx => Dash();
@@ -54,8 +57,8 @@ public class PlayerController : MonoBehaviour
             currentMoveDirection = forward * inputManager.move;
             move = currentMoveDirection * speed;
 
-            // character.Move(move * Time.deltaTime);
-            transform.position += move * Time.deltaTime;
+            character.Move(move * Time.deltaTime);
+            // transform.position += move * Time.deltaTime;
         }
 
         if (inputManager.move != 0)
@@ -68,9 +71,10 @@ public class PlayerController : MonoBehaviour
             else if (vel.y > 0 && !UnityEngine.Input.GetKey(KeyCode.Space))
                 vel += Vector3.up * gravity * (lowJump - 1) * Time.deltaTime;
         }
-        // character.Move(vel * Time.deltaTime);
+
         vel.x /= 1 + drag * Time.deltaTime;
-        transform.position += vel * Time.deltaTime;
+        character.Move(vel * Time.deltaTime);
+        // transform.position += vel * Time.deltaTime;
     }
 
     void Gravity()
@@ -87,14 +91,16 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        rb.velocity = Vector3.zero;
-        vel += Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity);
+        if (isGrounded)
+        {
+            rb.velocity = Vector3.zero;
+            vel += Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
     }
 
     void Dash()
     {
-
-        if (inputManager.inputControls.Gameplay.Dash.triggered)
+        if (canDash)
         {
             StartCoroutine(DashCountdown());
             vel += Vector3.Scale(transform.forward,
@@ -103,7 +109,6 @@ public class PlayerController : MonoBehaviour
                                                                   (Mathf.Log(1f / (Time.deltaTime * drag + 1)) / -Time.deltaTime)));
             vel.y = 0;
         }
-
     }
 
     IEnumerator DashCountdown()
@@ -111,8 +116,16 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         yield return new WaitForSeconds(dashTime);
         isDashing = false;
+        StartCoroutine(DashCooldown());
         rb.velocity = Vector3.zero;
 
+    }
+    bool canDash = true;
+    IEnumerator DashCooldown()
+    {
+        canDash = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 
     void GrappleTo()
@@ -121,15 +134,18 @@ public class PlayerController : MonoBehaviour
         if (grapple.target != null & grapple.canGrapple)
         {
             StartCoroutine(GrappleTime(grapple.target));
-            // GetComponent<Rigidbody>().AddForce((grapple.target.position - transform.position) * grappleDistance, ForceMode.Impulse);
         }
     }
 
     IEnumerator GrappleTime(Transform t)
     {
-        Transform target = t;
-        float currentTime = 0;
+        character.enabled = false;
+        rb.isKinematic = false;
         isGrappling = true;
+        Transform target = t;
+        Vector3 dir = target.position - transform.position;
+        float currentTime = 0;
+
         while (currentTime <= grappleTime)
         {
             float sp = grapplespeed.Evaluate(currentTime);
@@ -137,7 +153,10 @@ public class PlayerController : MonoBehaviour
             rb.velocity = (target.position - transform.position) * sp;
             yield return null;
         }
+        
         isGrappling = false;
+        rb.isKinematic = true;
+        character.enabled = true;
         rb.velocity = Vector3.zero;
     }
 }
