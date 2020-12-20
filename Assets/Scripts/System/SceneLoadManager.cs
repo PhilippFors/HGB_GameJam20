@@ -12,15 +12,16 @@ public class SceneLoadManager : MonoBehaviour
     public void LoadNextLevel()
     {
         currentLevel++;
-        if (currentLevel < levelBuildindex.Length)
-            StartCoroutine(LoadScene(levelBuildindex[currentLevel]));
-        else
+        if (SceneManager.GetActiveScene().buildIndex + 1 == levelBuildindex[2] + 1)
             ReturnToStartMenu();
+        else
+            StartCoroutine(LoadScene(levelBuildindex[SceneManager.GetActiveScene().buildIndex]));
+
     }
 
     public void RestartLevel()
     {
-        SceneManager.LoadScene(levelBuildindex[currentLevel]);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ReturnToStartMenu()

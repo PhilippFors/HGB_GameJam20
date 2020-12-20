@@ -131,10 +131,10 @@ public class Selectionbox : MonoBehaviour
         screenBoxCol.transform.position = new Vector3(screenBoxCol.transform.position.x, screenBoxCol.transform.position.y, selectionBox.transform.position.z);
     }
 
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.DrawCube(new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist), new Vector3(1, 1, 0.3f));
-    // }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawCube(new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist), new Vector3(1, 1, 0.3f));
+    }
 
     void ButtonStart()
     {

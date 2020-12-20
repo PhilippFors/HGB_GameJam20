@@ -234,8 +234,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneLoad: {fileID: 187494363002195493}
+  player: {fileID: 0}
   uiManager: {fileID: 760972162421506300}
-  playerController: {fileID: 0}
 --- !u!1 &6203300891590933623
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,7 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startMenu: 0
-  levelBuildindex: 01000000
+  levelBuildindex: 010000000200000003000000
   currentLevel: 0
   uiManager: {fileID: 760972162421506300}
   player: {fileID: 0}
@@ -329,6 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transtionImage: {fileID: 0}
   pauseMenu: {fileID: 0}
+  input: {fileID: 0}
 --- !u!1 &8295696443659363161
 GameObject:
   m_ObjectHideFlags: 0

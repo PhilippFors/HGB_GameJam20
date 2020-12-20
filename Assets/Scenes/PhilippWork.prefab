@@ -104,22 +104,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3128934226023700911}
     m_Modifications:
-    - target: {fileID: 187494363002195493, guid: 9dc2d7a4dbcc93e4b88737395e1dec77, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 187494363002195493, guid: 9dc2d7a4dbcc93e4b88737395e1dec77, type: 3}
-      propertyPath: levelBuildindex.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 187494363002195493, guid: 9dc2d7a4dbcc93e4b88737395e1dec77, type: 3}
-      propertyPath: levelBuildindex.Array.data[1]
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 187494363002195493, guid: 9dc2d7a4dbcc93e4b88737395e1dec77, type: 3}
-      propertyPath: levelBuildindex.Array.data[2]
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 418609343988211326, guid: 9dc2d7a4dbcc93e4b88737395e1dec77, type: 3}
       propertyPath: player
       value: 

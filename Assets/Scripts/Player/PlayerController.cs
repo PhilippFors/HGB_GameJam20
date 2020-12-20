@@ -62,9 +62,10 @@ public class PlayerController : MonoBehaviour
 
         if (alive)
         {
-            if (!isDashing)
+            currentMoveDirection = forward * inputManager.move;
+            if (!isDashing && !isGrappling)
             {
-                currentMoveDirection = forward * inputManager.move;
+
                 move = currentMoveDirection * speed;
 
                 character.Move(move * Time.deltaTime);
@@ -84,7 +85,8 @@ public class PlayerController : MonoBehaviour
         }
         vel.x /= 1 + drag * Time.deltaTime;
 
-        character.Move(vel * Time.deltaTime);
+        if (!isGrappling)
+            character.Move(vel * Time.deltaTime);
         // transform.position += vel * Time.deltaTime;
     }
 
