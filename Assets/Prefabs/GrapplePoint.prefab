@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73d32632daf000e4c9717b64f35b3085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exists: 0
+  exists: 1
   isHidden: 0
   copy: {fileID: 0}
   boxCol: {fileID: 3036943047337817801}

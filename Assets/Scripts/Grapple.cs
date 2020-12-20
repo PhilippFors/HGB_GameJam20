@@ -23,10 +23,13 @@ public class Grapple : MonoBehaviour
             GrapplePoint p = hit.transform.GetComponent<GrapplePoint>();
             if (p != null)
             {
-                target = p.transform;
-                p.SetActive();
+                canGrapple = Vector3.Distance(transform.position, p.transform.position) <= grappleDist;
+                if (canGrapple)
+                {
+                    target = p.transform;
+                    p.SetActive();
+                }
             }
-            canGrapple = Vector3.Distance(transform.position, target.position) <= grappleDist;
         }
         else
         {
