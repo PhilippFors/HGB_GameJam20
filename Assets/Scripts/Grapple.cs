@@ -23,11 +23,14 @@ public class Grapple : MonoBehaviour
             GrapplePoint p = hit.transform.GetComponent<GrapplePoint>();
             if (p != null)
             {
-                canGrapple = Vector3.Distance(transform.position, p.transform.position) <= grappleDist;
-                if (canGrapple)
+                if (!Physics.Raycast(transform.position, p.transform.position - transform.position, 30f, LayerMask.GetMask("Walls")))
                 {
-                    target = p.transform;
-                    p.SetActive();
+                    canGrapple = Vector3.Distance(transform.position, p.transform.position) <= grappleDist;
+                    if (canGrapple)
+                    {
+                        target = p.transform;
+                        p.SetActive();
+                    }
                 }
             }
         }
