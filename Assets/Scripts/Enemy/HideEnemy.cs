@@ -4,12 +4,53 @@ using UnityEngine;
 
 public abstract class HideEnemy : MonoBehaviour
 {
+    public bool exists;
+    public GameObject original;
+    public GameObject copy;
+    public MeshRenderer[] rend;
+    public MeshRenderer[] rendCopy;
+
+    [HideInInspector] public BoxCollider boxCol;
     public bool isDisabled;
     public Transform[] rayEmitters;
-    public abstract void Disable();
-    int i = 0;
-    public abstract void Enable();
     public LayerMask dimension;
+    int i = 0;
+    public abstract void Disable();
+
+    public abstract void Enable();
+
+    public virtual void INIT()
+    {
+        boxCol = GetComponent<BoxCollider>();
+        if (exists)
+        {
+            GetComponentInChildren<Animator>().enabled = true;
+            copy.GetComponentInChildren<Animator>().enabled = false;
+            if (boxCol != null)
+                boxCol.enabled = true;
+            foreach (MeshRenderer r in rend)
+                r.enabled = true;
+
+            foreach (MeshRenderer rr in rendCopy)
+                rr.enabled = false;
+        }
+        else
+        {
+            GetComponentInChildren<Animator>().enabled = false;
+            copy.GetComponentInChildren<Animator>().enabled = true;
+            if (boxCol != null)
+                boxCol.enabled = false;
+            foreach (MeshRenderer r in rend)
+                r.enabled = false;
+
+            foreach (MeshRenderer rr in rendCopy)
+                rr.enabled = true;
+        }
+    }
+    public void UpdateCopy()
+    {
+        copy.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + GameSettings.instance.zOffset);
+    }
     public void DoRayCast()
     {
         RaycastHit hit;
@@ -25,10 +66,20 @@ public abstract class HideEnemy : MonoBehaviour
                 }
             }
         }
-        if (i == 2)
-            Disable();
+        if (exists)
+        {
+            if (i == 2)
+                Disable();
+            else
+                Enable();
+        }
         else
-            Enable();
+        {
+            if (i == 2)
+                Enable();
+            else
+                Disable();
+        }
     }
 
     public void Damage()

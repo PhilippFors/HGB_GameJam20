@@ -20,7 +20,6 @@ public class Grapple : MonoBehaviour
         Ray cameraRay = Camera.main.ScreenPointToRay(input.mousePos);
         if (Physics.Raycast(cameraRay, out hit, 20f, grappleMask))
         {
-            // squareStartPos = cameraRay.GetPoint(rayLength);
             GrapplePoint p = hit.transform.GetComponent<GrapplePoint>();
             if (p != null)
             {
@@ -36,23 +35,5 @@ public class Grapple : MonoBehaviour
 
             target = null;
         }
-        // else
-        // {
-        //     target = null;
-        // }
     }
-
-    // void GrappleTo()
-    // {
-    //     Debug.Log("grapple");
-    //     if (target != null)
-    //     {
-    //         vel = Vector3.Scale(transform.forward,
-    //                                    dashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime * drag + 1)) / -Time.deltaTime),
-    //                                                               0,
-    //                                                               (Mathf.Log(1f / (Time.deltaTime * drag + 1)) / -Time.deltaTime)));
-    //     }
-
-    //     vel.x /= 1 + drag * Time.deltaTime;
-    // }
 }

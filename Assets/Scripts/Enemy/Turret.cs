@@ -19,12 +19,23 @@ public class Turret : HideEnemy
     public BoxCollider boxCollider;
     private void Start()
     {
+        INIT();
         ogrot = barrels.transform.rotation;
+    }
+
+    public override void INIT()
+    {
+        base.INIT();
+        if (exists)
+            Enable();
+        else
+            Disable();
     }
     private void Update()
     {
+        UpdateCopy();
         DoRayCast();
-        if (isDisabled)
+        if (exists && isDisabled)
             return;
 
         LookAtPlayer();
@@ -77,11 +88,15 @@ public class Turret : HideEnemy
     {
         isDisabled = true;
         boxCollider.enabled = false;
+        foreach (MeshRenderer r in rend)
+            r.enabled = false;
     }
 
     public override void Enable()
     {
         isDisabled = false;
         boxCollider.enabled = true;
+        foreach (MeshRenderer r in rend)
+            r.enabled = true;
     }
 }

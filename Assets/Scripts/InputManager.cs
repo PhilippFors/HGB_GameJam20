@@ -36,7 +36,7 @@ public class InputManager : MonoBehaviour
         move = 0;
         isMoving = false;
     }
-    // Update is called once per frame
+
     void Update()
     {
         mousePos = inputControls.Gameplay.Mouse.ReadValue<Vector2>();

@@ -36,13 +36,7 @@ public class DimensionTrigger : MonoBehaviour
             h.gameObject.SetActive(false);
         }
     }
-
-    // IEnumerator Wait(Collider other)
-    // {
-
-
-    // }
-
+    
     public void ReleaseToRight()
     {
         if (collectables.Count == 0)

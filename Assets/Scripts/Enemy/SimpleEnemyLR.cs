@@ -14,18 +14,28 @@ public class SimpleEnemyLR : HideEnemy
     bool noFloor;
     public Transform[] rays;
 
-    public BoxCollider boxCol;
     public BoxCollider weapon;
 
     private void Start()
     {
+        INIT();
         forward = Camera.main.transform.right;
     }
+    public override void INIT()
+    {
+        base.INIT();
+        if (exists)
+            Enable();
+        else
+            Disable();
 
+        // boxCol.enabled = false;
+    }
     private void Update()
     {
+        UpdateCopy();
         DoRayCast();
-        if (isDisabled)
+        if (exists && isDisabled)
             return;
 
         CheckForEdge();
@@ -87,17 +97,20 @@ public class SimpleEnemyLR : HideEnemy
 
     public override void Disable()
     {
-        // GetComponent<Rigidbody>().useGravity = false;
+        GetComponentInChildren<Animator>().enabled = false;
         isDisabled = true;
         // boxCol.enabled = false;
         weapon.enabled = false;
+        foreach (MeshRenderer r in rend)
+            r.enabled = false;
     }
 
     public override void Enable()
     {
+        GetComponentInChildren<Animator>().enabled = true;
         isDisabled = false;
-        // boxCol.enabled = true;
         weapon.enabled = true;
-        // GetComponent<Rigidbody>().useGravity = true;
+        foreach (MeshRenderer r in rend)
+            r.enabled = true;
     }
 }
