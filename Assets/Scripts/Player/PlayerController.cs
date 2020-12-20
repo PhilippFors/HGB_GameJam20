@@ -77,6 +77,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!isDashing && !isGrappling)
             vel.y += gravity * Time.deltaTime;
+        else
+            vel.y = 0;
 
         isGrounded = Physics.CheckSphere(groundchecker.position, 0.2f, defaultMask, QueryTriggerInteraction.Ignore);
         if (isGrounded && vel.y < 0)
@@ -85,39 +87,32 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
+        rb.velocity = Vector3.zero;
         vel += Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
 
     void Dash()
     {
+
         if (inputManager.inputControls.Gameplay.Dash.triggered)
         {
-
             StartCoroutine(DashCountdown());
-            vel = Vector3.Scale(transform.forward,
+            vel += Vector3.Scale(transform.forward,
                                        dashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime * drag + 1)) / -Time.deltaTime),
                                                                   0,
                                                                   (Mathf.Log(1f / (Time.deltaTime * drag + 1)) / -Time.deltaTime)));
+            vel.y = 0;
         }
 
-        // vel.y /= 1 + drag * Time.deltaTime;
-        // vel.z /= 1 + drag * Time.deltaTime;
     }
 
     IEnumerator DashCountdown()
     {
         isDashing = true;
         yield return new WaitForSeconds(dashTime);
-        // float currentTime = 0;
-        // Vector3 c = currentMoveDirection;
-        // while (currentTime <= dashTime)
-        // {
-        //     float sp = dashCurve.Evaluate(currentTime);
-        //     currentTime += Time.deltaTime;
-        //     rb.velocity = c * sp;
-        //     yield return null;
-        // }
         isDashing = false;
+        rb.velocity = Vector3.zero;
+
     }
 
     void GrappleTo()
@@ -143,5 +138,6 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         isGrappling = false;
+        rb.velocity = Vector3.zero;
     }
 }
