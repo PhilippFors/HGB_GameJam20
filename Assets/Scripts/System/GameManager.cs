@@ -25,13 +25,13 @@ public class GameManager : MonoBehaviour
         uiManager.FadeToTransparent();
         yield return new WaitForSeconds(1f);
         if (!isStartMenu)
-            player.alive = true;
+            player.TurnOn();
     }
 
     public void ReturnToStartMenu()
     {
         if (player != null)
-            player.alive = false;
+            player.TurnOff();
         sceneLoad.ReturnToStartMenu();
     }
 
@@ -39,14 +39,14 @@ public class GameManager : MonoBehaviour
     public void NextLevel()
     {
         if (player != null)
-            player.alive = false;
+            player.TurnOff();
         sceneLoad.LoadNextLevel();
     }
 
     public void Restart()
     {
         if (player != null)
-            player.alive = false;
+            player.TurnOff();
         sceneLoad.RestartLevel();
     }
 

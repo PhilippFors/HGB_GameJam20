@@ -15,6 +15,7 @@ public class Turret : HideEnemy
     public bool faceLeft;
     bool canShoot = false;
     Quaternion ogrot;
+    public float minShootDistance = 15f;
 
     public BoxCollider boxCollider;
     private void Start()
@@ -52,14 +53,15 @@ public class Turret : HideEnemy
         }
         time += Time.deltaTime;
         if (IsPlayerInFront())
-            if (canShoot)
-            {
-                time -= fireRate;
-                anim.Play("Turret_Shoot");
-                Bullet b = Instantiate(bullet, bulletEmitter.transform.position, bulletEmitter.rotation).GetComponent<Bullet>();
-                b.InitBullet(bulletEmitter.forward, 4, 5);
-                canShoot = false;
-            }
+            if (Vector3.Distance(player.transform.position, transform.position) <= minShootDistance)
+                if (canShoot)
+                {
+                    time = 0;
+                    anim.Play("Turret_Shoot");
+                    Bullet b = Instantiate(bullet, bulletEmitter.transform.position, bulletEmitter.rotation).GetComponent<Bullet>();
+                    b.InitBullet(bulletEmitter.forward, 4, 5);
+                    canShoot = false;
+                }
     }
     public void LookAtPlayer()
     {

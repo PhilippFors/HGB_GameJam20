@@ -30,7 +30,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth == 0)
         {
-            GetComponent<PlayerController>().alive = false;
+            GetComponent<PlayerController>().TurnOff();
             RespawnSystem.instance.StartReset();
         }
         healthUI.UpdateUI(currentHealth);

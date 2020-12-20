@@ -49,7 +49,7 @@ public class GrapplePoint : Hideable
 
     public override void Unhide()
     {
-        rend.enabled = true;
+        // rend.enabled = true;
         boxCol.enabled = true;
     }
 }

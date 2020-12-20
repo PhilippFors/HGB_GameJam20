@@ -14,9 +14,11 @@ public class BridgePart : Hideable
     }
     public override void Hide()
     {
-        if (rend != null)
+        if (exists && rend != null)
             rend.enabled = false;
+
         boxCol.enabled = false;
+
         isHidden = true;
         if (copy != null)
             copy.GetComponent<MeshRenderer>().enabled = false;
@@ -24,7 +26,7 @@ public class BridgePart : Hideable
 
     public override void Unhide()
     {
-        if (rend != null)
+        if (exists && rend != null)
             rend.enabled = true;
         boxCol.enabled = true;
         isHidden = false;

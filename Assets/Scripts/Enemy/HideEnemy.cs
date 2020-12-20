@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class HideEnemy : MonoBehaviour
 {
     public bool exists;
+    public bool showBoth;
     public GameObject original;
     public GameObject copy;
     public MeshRenderer[] rend;
@@ -27,14 +28,27 @@ public abstract class HideEnemy : MonoBehaviour
             if (exists)
             {
                 GetComponentInChildren<Animator>().enabled = true;
-                copy.GetComponentInChildren<Animator>().enabled = false;
+
+
                 if (boxCol != null)
                     boxCol.enabled = true;
                 foreach (MeshRenderer r in rend)
                     r.enabled = true;
 
-                foreach (MeshRenderer rr in rendCopy)
-                    rr.enabled = false;
+                if (showBoth)
+                {
+                    copy.GetComponentInChildren<Animator>().enabled = true;
+                    foreach (MeshRenderer rr in rendCopy)
+                        rr.enabled = true;
+                }
+                else
+                {
+                    copy.GetComponentInChildren<Animator>().enabled = false;
+                    foreach (MeshRenderer rr in rendCopy)
+                        rr.enabled = false;
+
+                }
+
             }
             else
             {
@@ -77,7 +91,12 @@ public abstract class HideEnemy : MonoBehaviour
         if (exists)
         {
             if (i == 2)
-                Disable();
+            {
+                if (showBoth)
+                    Enable();
+                else
+                    Disable();
+            }
             else
                 Enable();
         }

@@ -13,14 +13,14 @@ public class SceneLoadManager : MonoBehaviour
     {
         currentLevel++;
         if (currentLevel < levelBuildindex.Length)
-            StartCoroutine(LoadScene(currentLevel));
+            StartCoroutine(LoadScene(levelBuildindex[currentLevel]));
         else
             ReturnToStartMenu();
     }
 
     public void RestartLevel()
     {
-        SceneManager.LoadScene(currentLevel);
+        SceneManager.LoadScene(levelBuildindex[currentLevel]);
     }
 
     public void ReturnToStartMenu()
@@ -39,6 +39,6 @@ public class SceneLoadManager : MonoBehaviour
     {
         uiManager.FadeToBlack();
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Single);
+        yield return SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Single);
     }
 }

@@ -91,7 +91,6 @@ public class SimpleEnemyLR : HideEnemy
                     moveR = false;
                 else
                     moveR = true;
-                return;
             }
     }
 

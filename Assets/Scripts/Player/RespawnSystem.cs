@@ -27,7 +27,7 @@ public class RespawnSystem : MonoBehaviour
 
         //Transition
         yield return new WaitForSeconds(1f);
-        player.alive = true;
+        player.TurnOn();
         player.GetComponent<PlayerHealth>().ResetHealth();
         input.inputControls.Enable();
     }

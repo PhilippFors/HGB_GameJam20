@@ -45,35 +45,45 @@ public class PlayerController : MonoBehaviour
         inputManager.inputControls.Gameplay.Dash.performed += ctx => Dash();
         inputManager.inputControls.Gameplay.Jump.performed += ctx => Jump();
     }
+    public void TurnOff()
+    {
+        alive = false;
+        inputManager.inputControls.Disable();
+    }
 
+    public void TurnOn()
+    {
+        alive = true;
+        inputManager.inputControls.Enable();
+    }
     private void Update()
     {
-        if (!alive)
-            return;
-
         Gravity();
 
-        if (!isDashing)
+        if (alive)
         {
-            currentMoveDirection = forward * inputManager.move;
-            move = currentMoveDirection * speed;
+            if (!isDashing)
+            {
+                currentMoveDirection = forward * inputManager.move;
+                move = currentMoveDirection * speed;
 
-            character.Move(move * Time.deltaTime);
-            // transform.position += move * Time.deltaTime;
+                character.Move(move * Time.deltaTime);
+                // transform.position += move * Time.deltaTime;
+            }
+
+            if (inputManager.move != 0)
+                transform.rotation = Quaternion.LookRotation(currentMoveDirection, Vector3.up);
+
+            if (!isGrappling && !isDashing)
+            {
+                if (vel.y < 0)
+                    vel += Vector3.up * gravity * (fallmult - 1) * Time.deltaTime;
+                else if (vel.y > 0 && !UnityEngine.Input.GetKey(KeyCode.Space))
+                    vel += Vector3.up * gravity * (lowJump - 1) * Time.deltaTime;
+            }
         }
-
-        if (inputManager.move != 0)
-            transform.rotation = Quaternion.LookRotation(currentMoveDirection, Vector3.up);
-
-        if (!isGrappling && !isDashing)
-        {
-            if (vel.y < 0)
-                vel += Vector3.up * gravity * (fallmult - 1) * Time.deltaTime;
-            else if (vel.y > 0 && !UnityEngine.Input.GetKey(KeyCode.Space))
-                vel += Vector3.up * gravity * (lowJump - 1) * Time.deltaTime;
-        }
-
         vel.x /= 1 + drag * Time.deltaTime;
+
         character.Move(vel * Time.deltaTime);
         // transform.position += vel * Time.deltaTime;
     }

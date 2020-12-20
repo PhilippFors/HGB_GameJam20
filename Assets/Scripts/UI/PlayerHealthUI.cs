@@ -9,8 +9,8 @@ public class PlayerHealthUI : MonoBehaviour
 
     public void UpdateUI(int playerHealth)
     {
-        if (playerHealth <= 0)
-            for (int x = 1; x <= healthPoints.Length + 1; x++)
+        if (playerHealth >= 0)
+            for (int x = 1; x <= healthPoints.Length; x++)
                 if (x <= playerHealth)
                     healthPoints[x - 1].gameObject.SetActive(true);
                 else
