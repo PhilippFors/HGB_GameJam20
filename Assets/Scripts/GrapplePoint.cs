@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DG.Tweening;
+
 public class GrapplePoint : MonoBehaviour
 {
     public bool active;
@@ -9,22 +11,26 @@ public class GrapplePoint : MonoBehaviour
 
     public Color inactiveC;
     public Color activeC;
+    Sequence tweenSeq;
 
     private void Start()
     {
+        mat = GetComponent<MeshRenderer>().material; 
         SetInactive();
     }
     public void SetActive()
     {
         active = true;
 
-        mat.SetColor("_EmissiveColor", activeC);
+       
+     
+        mat.DOFloat(0.95f, "_EmissiveExposureWeight", 0.3f);
     }
 
     public void SetInactive()
     {
         active = false;
-        mat.SetColor("_EmissiveColor", inactiveC);
+        mat.DOFloat(1f, "_EmissiveExposureWeight", 0.3f);
     }
 }
 
