@@ -8,7 +8,7 @@ public class Turret : HideEnemy
     public float lerpSpeed;
     float time = 0;
     public Transform bulletEmitter;
-    public Transform player;
+    [HideInInspector] public Transform player;
     public GameObject bullet;
     public Transform barrels;
     public Animator anim;
@@ -21,6 +21,7 @@ public class Turret : HideEnemy
     {
         INIT();
         ogrot = barrels.transform.rotation;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     public override void INIT()

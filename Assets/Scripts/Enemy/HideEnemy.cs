@@ -21,35 +21,43 @@ public abstract class HideEnemy : MonoBehaviour
 
     public virtual void INIT()
     {
-        boxCol = GetComponent<BoxCollider>();
-        if (exists)
+        if (copy != null)
         {
-            GetComponentInChildren<Animator>().enabled = true;
-            copy.GetComponentInChildren<Animator>().enabled = false;
-            if (boxCol != null)
-                boxCol.enabled = true;
-            foreach (MeshRenderer r in rend)
-                r.enabled = true;
+            boxCol = GetComponent<BoxCollider>();
+            if (exists)
+            {
+                GetComponentInChildren<Animator>().enabled = true;
+                copy.GetComponentInChildren<Animator>().enabled = false;
+                if (boxCol != null)
+                    boxCol.enabled = true;
+                foreach (MeshRenderer r in rend)
+                    r.enabled = true;
 
-            foreach (MeshRenderer rr in rendCopy)
-                rr.enabled = false;
+                foreach (MeshRenderer rr in rendCopy)
+                    rr.enabled = false;
+            }
+            else
+            {
+                GetComponentInChildren<Animator>().enabled = false;
+                copy.GetComponentInChildren<Animator>().enabled = true;
+                if (boxCol != null)
+                    boxCol.enabled = false;
+                foreach (MeshRenderer r in rend)
+                    r.enabled = false;
+
+                foreach (MeshRenderer rr in rendCopy)
+                    rr.enabled = true;
+            }
         }
         else
         {
-            GetComponentInChildren<Animator>().enabled = false;
-            copy.GetComponentInChildren<Animator>().enabled = true;
-            if (boxCol != null)
-                boxCol.enabled = false;
-            foreach (MeshRenderer r in rend)
-                r.enabled = false;
-
-            foreach (MeshRenderer rr in rendCopy)
-                rr.enabled = true;
+            exists = true;
         }
     }
     public void UpdateCopy()
     {
-        copy.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + GameSettings.instance.zOffset);
+        if (copy != null)
+            copy.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + GameSettings.instance.zOffset);
     }
     public void DoRayCast()
     {
