@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] float maximumHealth;
-    public float currentHealth;
+    [SerializeField] int maximumHealth;
+    public int currentHealth;
     public bool invulnverable = false;
-    public float Iframes;
-
+    public float Iseconds;
+    public PlayerHealthUI healthUI;
     private void Start()
     {
         currentHealth = maximumHealth;
@@ -33,12 +33,13 @@ public class PlayerHealth : MonoBehaviour
             GetComponent<PlayerController>().alive = false;
             RespawnSystem.instance.StartReset();
         }
+        healthUI.UpdateUI(currentHealth);
     }
 
     IEnumerator Wait()
     {
         invulnverable = true;
-        yield return new WaitForSeconds(Iframes);
+        yield return new WaitForSeconds(Iseconds);
         invulnverable = false;
     }
 }

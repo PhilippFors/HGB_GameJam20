@@ -4,22 +4,13 @@ using UnityEngine;
 
 public class BridgePart : Hideable
 {
-    public BoxCollider boxCol;
-    public MeshRenderer rend;
     private void Start()
     {
-        rend = GetComponent<MeshRenderer>();
-        boxCol = GetComponent<BoxCollider>();
-        if (exists)
-        {
-            rend.enabled = true;
-            boxCol.enabled = true;
-        }
-        else
-        {
-            rend.enabled = false;
-            boxCol.enabled = false;
-        }
+        INIT();
+    }
+    private void Update()
+    {
+        DoRayCast();
     }
     public override void Hide()
     {
@@ -27,6 +18,8 @@ public class BridgePart : Hideable
             rend.enabled = false;
         boxCol.enabled = false;
         isHidden = true;
+        if (copy != null)
+            copy.GetComponent<MeshRenderer>().enabled = false;
     }
 
     public override void Unhide()
@@ -35,6 +28,8 @@ public class BridgePart : Hideable
             rend.enabled = true;
         boxCol.enabled = true;
         isHidden = false;
+        if (copy != null)
+            copy.GetComponent<MeshRenderer>().enabled = true;
     }
 
 }

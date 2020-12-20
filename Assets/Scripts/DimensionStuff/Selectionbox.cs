@@ -6,7 +6,7 @@ public class Selectionbox : MonoBehaviour
 {
     [SerializeField] InputManager inputManager;
     [SerializeField] Transform selectionBox;
-  
+
     Vector3 squareStartPos;
     Vector3 squareEndPos;
     Vector3 lastPos;
@@ -138,6 +138,11 @@ public class Selectionbox : MonoBehaviour
 
     void ButtonStart()
     {
+        if (timer && coroutine != null)
+        {
+            StopCoroutine(coroutine);
+            timer = false;
+        }
         selecting = true;
         selectionBox.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist);
         zeplane = new Plane(Vector3.forward, new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z + planeDist));
@@ -152,13 +157,14 @@ public class Selectionbox : MonoBehaviour
     Coroutine coroutine;
     void ButtonStop()
     {
-        Debug.Log("Stop");
-
         collection.QueueWorker();
         selecting = false;
 
         if (!timer && coroutine != null)
+        {
             StopCoroutine(coroutine);
+            timer = false;
+        }
 
         if (!timer)
             coroutine = StartCoroutine(OpenTime());
@@ -187,7 +193,7 @@ public class Selectionbox : MonoBehaviour
 
     IEnumerator OneFrame()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         selectionBox.gameObject.SetActive(false);
     }
 
@@ -195,7 +201,7 @@ public class Selectionbox : MonoBehaviour
     {
         timer = true;
         yield return new WaitForSeconds(openTime);
-        CloseBox();
         timer = false;
+        CloseBox();
     }
 }

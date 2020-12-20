@@ -29,7 +29,7 @@ public class SimpleEnemyLR : HideEnemy
         else
             Disable();
 
-        // boxCol.enabled = false;
+        boxCol.enabled = false;
     }
     private void Update()
     {

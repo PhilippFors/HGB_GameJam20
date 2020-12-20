@@ -5,9 +5,15 @@ using UnityEngine.UI;
 public class PlayerHealthUI : MonoBehaviour
 {
     public PlayerHealth player;
-    public TMPro.TextMeshProUGUI ui;
-    void Update()
+    public Image[] healthPoints;
+
+    public void UpdateUI(int playerHealth)
     {
-        ui.text = player.currentHealth.ToString();
+        if (playerHealth <= 0)
+            for (int x = 1; x <= healthPoints.Length + 1; x++)
+                if (x <= playerHealth)
+                    healthPoints[x - 1].gameObject.SetActive(true);
+                else
+                    healthPoints[x - 1].gameObject.SetActive(false);
     }
 }

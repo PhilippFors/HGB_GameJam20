@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public bool alive;
     public float speed;
     public float gravity;
+    public float groundcheckerRadius;
 
     [Header("Jump Settings")]
     public float fallmult;
@@ -84,7 +85,7 @@ public class PlayerController : MonoBehaviour
         else
             vel.y = 0;
 
-        isGrounded = Physics.CheckSphere(groundchecker.position, 0.2f, defaultMask, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckSphere(groundchecker.position, groundcheckerRadius, defaultMask, QueryTriggerInteraction.Ignore);
         if (isGrounded && vel.y < 0)
             vel.y = 0;
     }
@@ -93,7 +94,6 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded)
         {
-            rb.velocity = Vector3.zero;
             vel += Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
@@ -153,10 +153,15 @@ public class PlayerController : MonoBehaviour
             rb.velocity = (target.position - transform.position) * sp;
             yield return null;
         }
-        
+
         isGrappling = false;
         rb.isKinematic = true;
         character.enabled = true;
         rb.velocity = Vector3.zero;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(groundchecker.position, groundcheckerRadius);
     }
 }
